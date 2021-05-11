@@ -7,11 +7,11 @@ public class User {
     private int id;
     private String username;
     private String password;
-    private String salt;
+    private String salt;//随机字符串，用来加密
     private String email;
-    private int type;
+    private int type;//账号类型
     private int status;
-    private String activationCode;
+    private String activationCode;//激活码
     private String headerUrl;
     private Date createTime;
 
