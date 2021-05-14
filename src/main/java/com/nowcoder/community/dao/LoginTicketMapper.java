@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.*;
 //这里用直接在Mapper内写注解的方式，不在mapper文件夹下
 
 @Mapper
+@Deprecated//声明一下，这个组件不推荐使用
 public interface LoginTicketMapper {
 
     @Insert({
