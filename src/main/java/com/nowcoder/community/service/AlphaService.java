@@ -23,7 +23,7 @@ import java.util.Date;
 //测试声明式事务 和 编程式事务
 
 @Service
-//@Scope("prototype")多个实例，每次访问生成新实例
+//@Scope("prototype")默认为singleton，此处意为 多个实例，每次访问生成新实例
 public class AlphaService {
 
     @Autowired

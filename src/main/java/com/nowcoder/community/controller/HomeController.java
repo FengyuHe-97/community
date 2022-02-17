@@ -38,6 +38,7 @@ public class HomeController implements CommunityConstant {
         page.setPath("/index");
 
         List<DiscussPost> list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
+        //此处查出的结果只有userID 缺少用户名 这里再找到用户信息，一起封装到一个map里
         List<Map<String, Object>> discussPosts = new ArrayList<>();
         if (list != null) {
             for (DiscussPost post : list) {
