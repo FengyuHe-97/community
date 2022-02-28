@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -150,5 +151,41 @@ public class UserController implements CommunityConstant {
 
         return "/site/profile";
     }
+
+    //更新密码
+    @RequestMapping(path = "updatePassword", method =RequestMethod.POST)
+    public String updatePassword(String oldPassword, String newPassword, String confirmPassword,
+                                 Model model, HttpSession session, HttpServletResponse response) {
+        //确认两次新密码是否一致
+        if(newPassword == null || confirmPassword == null || !newPassword.equals(confirmPassword)) {
+            model.addAttribute("confirmPasswordMsg","两次新密码不一致");
+            return "/site/setting";
+        }
+
+        User user = hostHolder.getUser();
+        // 将明文密码转为加密形式
+        String password = CommunityUtil.md5(oldPassword + user.getSalt());
+
+        //检验原密码是否输入正确
+        if(oldPassword == null || !user.getPassword().equals(password)) {
+            model.addAttribute("oldPasswordMsg","原密码输入不正确");
+            return "/site/setting";
+        }
+
+        //检验原密码与新密码是否有区别
+        if(oldPassword.equals(newPassword)) {
+            model.addAttribute("newPasswordMsg", "新旧密码必须不一致");
+            return  "/site/setting";
+        }
+
+        //将新密码转为加密码
+        password = CommunityUtil.md5(newPassword + user.getSalt());
+        userService.updatePassword(user.getId(),password);
+
+        return "redirect:/index";
+
+    }
+
+
 
 }

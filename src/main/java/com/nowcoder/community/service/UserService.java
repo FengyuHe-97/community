@@ -233,4 +233,8 @@ public class UserService implements CommunityConstant {
         redisTemplate.delete(redisKey);
     }
 
+    public int updatePassword(int userId, String password) {
+        return userMapper.updatePassword(userId, password);
+    }
+
 }
