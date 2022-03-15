@@ -27,6 +27,7 @@ public class AlphaInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         logger.debug("postHandle: " + handler.toString());
+        System.out.println("hahahaha");
     }
 
     // 在TemplateEngine之后执行
