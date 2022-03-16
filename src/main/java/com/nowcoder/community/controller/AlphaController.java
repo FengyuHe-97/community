@@ -59,7 +59,7 @@ public class AlphaController {
         // 返回响应数据
         response.setContentType("text/html;charset=utf-8");
         try (
-                PrintWriter writer = response.getWriter();//此处语法 括号内相当于finally
+                PrintWriter writer = response.getWriter()//此处语法 括号内相当于finally
         ) {
             writer.write("<h1>牛客网</h1>");
         } catch (IOException e) {
@@ -202,6 +202,16 @@ public class AlphaController {
         System.out.println(session.getAttribute("id"));
         System.out.println(session.getAttribute("name"));
         return "get session";
+    }
+
+
+    //ajax示例
+    @RequestMapping(path = "/ajax", method = RequestMethod.POST)
+    @ResponseBody
+    public String textAjax(String name, int age) {
+        System.out.println(name);
+        System.out.println(age);
+        return CommunityUtil.getJSONString(0,"操作成功!");
     }
 
 
