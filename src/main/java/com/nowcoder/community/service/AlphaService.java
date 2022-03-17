@@ -8,9 +8,12 @@ import com.nowcoder.community.entity.User;
 import com.nowcoder.community.util.CommunityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.PostConstruct;
@@ -53,6 +56,7 @@ public class AlphaService {
     }
 
     //事务 测试回滚
+    //声明式事务
     @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRED)
     public Object save1() {
 
@@ -80,8 +84,38 @@ public class AlphaService {
         return "ok";
     }
 
-/*    public Object save2() {
+    //编程式事务
+    public Object save2() {
+        transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
-    }*/
+        return transactionTemplate.execute(new TransactionCallback<Object>() {
+            @Override
+            public Object doInTransaction(TransactionStatus transactionStatus) {
+                //新增用户
+                User user = new User();
+                user.setUsername("beta");
+                user.setSalt(CommunityUtil.generateUUID().substring(0,5));
+                user.setPassword(CommunityUtil.md5("123" + user.getSalt()));
+                user.setEmail("beta@qq.com");
+                user.setHeaderUrl("http://image.nowcoder.com/head/999t.png");
+                user.setCreateTime(new Date());
+                userMapper.insertUser(user);
+
+                //新增帖子
+                DiscussPost post = new DiscussPost();
+                post.setUserId(user.getId());
+                post.setTitle("Hello");
+                post.setContent("新人报到");
+                post.setCreateTime(new Date());
+                discussPostMapper.insertDiscussPost(post);
+
+                //造错，让他报错
+                Integer.valueOf("abc");
+                return "ok";
+            }
+        });
+
+    }
 
 }
