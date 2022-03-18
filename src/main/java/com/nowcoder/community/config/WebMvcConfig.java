@@ -33,6 +33,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         //排除静态资源，其实通过loginRequired注解就可以了，但是这里可以提升效率
         registry.addInterceptor(loginRequiredInterceptor)
+                //不拦截静态路径 节约资源
                 .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");
     }
 
