@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nowcoder.community.dao.StudentMapper">
+
+        <insert id="batchInsertStudent" parameterType="com.nowcoder.community.entity.Student"  useGeneratedKeys="true" keyProperty="id" >
+            insert into students (`name`,`number`) values
+            <foreach collection="students" index="index" item="item" separator=",">
+                (#{item.name},#{item.number})
+            </foreach>
+        </insert>
+    </mapper>
