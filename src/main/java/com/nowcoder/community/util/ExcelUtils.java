@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -147,6 +148,12 @@ public class ExcelUtils {
                         //先把他格式化
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                         LocalDateTime time = LocalDateTime.parse(val.toString(), formatter);
+                        field.set(object, time);
+                        //如果其他类型的直接存
+                    } else if (field.getType() == Date.class) {
+                        //先把他格式化
+                        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//日期格式
+                        Date time = format.parse(val.toString());
                         field.set(object, time);
                         //如果其他类型的直接存
                     } else {

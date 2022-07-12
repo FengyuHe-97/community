@@ -11,4 +11,7 @@ import java.util.List;
 public interface StudentMapper {
     public Integer batchInsertStudent(@Param("students") List<Student> students);
 
+
+    List<Student> selectStudents();
+
 }

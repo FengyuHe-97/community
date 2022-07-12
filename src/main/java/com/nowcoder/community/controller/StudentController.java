@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,7 +34,7 @@ public class StudentController {
 
     @RequestMapping(path = "/excelUpload", method = RequestMethod.GET)
     public String getExcelPage() {
-        return "/site/excelUpload";
+        return "/site/excel";
     }
 
     @PostMapping("/upload")
@@ -82,6 +84,12 @@ public class StudentController {
                     //调用setFileValueByFieldName函数，把数据存到student对应的属性里面
                     ExcelUtils.setFileValueByFieldName(student, firstRows.get(j).toString().trim(), cellVal);
                 }
+
+                //把当前时间赋给创建时间
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                ExcelUtils.setFileValueByFieldName(student, firstRows.get(rows.size()).toString().trim(),
+                        df.format(System.currentTimeMillis()) );
+
                 //把student变量加到studentList
                 studentList.add(student);
             }
@@ -121,7 +129,21 @@ public class StudentController {
 
         }
         return "";
+        //https://blog.csdn.net/weixin_40948587/article/details/110283095
     }
+
+    @GetMapping("/selectUserListToExcel")
+    public void selectUserListToExcel(HttpServletResponse response){
+
+        try {
+            studentService.exportExcelFile(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            //https://blog.csdn.net/weixin_40948587/article/details/110283095
+        }
+
+    }
+
 
 
 

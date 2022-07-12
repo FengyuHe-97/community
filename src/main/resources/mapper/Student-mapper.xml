@@ -4,10 +4,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nowcoder.community.dao.StudentMapper">
 
+
+    <sql id="selectFields">
+        id, name, number,create_time
+    </sql>
+
         <insert id="batchInsertStudent" parameterType="com.nowcoder.community.entity.Student"  useGeneratedKeys="true" keyProperty="id" >
-            insert into students (`name`,`number`) values
+            insert into students (`name`,`number`,`create_time`) values
             <foreach collection="students" index="index" item="item" separator=",">
-                (#{item.name},#{item.number})
+                (#{item.name},#{item.number},#{item.createTime})
             </foreach>
         </insert>
+
+    <!-- 查询某个会话所包含的私信列表. -->
+    <select id="selectStudents" resultType="Student">
+        select <include refid="selectFields"></include>
+        from students
+        order by id desc
+    </select>
+
     </mapper>
+
+
